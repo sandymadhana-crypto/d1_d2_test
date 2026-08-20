@@ -40,3 +40,7 @@ models:
     # Applies to all files under models/example/
     example:
       +materialized: table
+
+
+on-run-end:
+  - "{{ d1_d2_on_run_end() }}"
