@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: sf_prod
+    database: SF_MSTR_PROD
+    schema: SF_PROD
+    tables:
+      - name: SF_EXEC_DETAIL_DASHBOARD
+      - name: SF_EXEC_DASHBOARD
+      - name: SF_SKU_CATEGORIES
+      - name: SF_STORE_SPACE
+      - name: STORE_SA
