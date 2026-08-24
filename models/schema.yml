@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: d1_d2_test
+    description: >
+      Daily audit comparing summed Division 1 + Division 2 net sales (from
+      SF_EXEC_DETAIL_DASHBOARD, filtered to Division 1/2 SKU categories and
+      RETAIL/DIRECT/MARKETPLACES/WAREHOUSE channels) against total company
+      net sales (from SF_EXEC_DASHBOARD) for the prior business day
+      (America/New_York). Runs incrementally, keyed on audit_date. If either
+      source table hasn't landed data for the prior day, the row is marked
+      STALE and the sales columns are nulled out rather than compared.
+    columns:
+      - name: transaction_date
+        description: The business date being audited (prior calendar day in America/New_York).
+      - name: audit_date
+        description: Same as transaction_date; used as the incremental unique_key for this model.
+      - name: d1_sales
+        description: >
+          Division 1 net sales for audit_date, in $M, summed from
+          SF_EXEC_DETAIL_DASHBOARD. Null when freshness_status is STALE.
+      - name: d2_sales
+        description: >
+          Division 2 net sales for audit_date, in $M, summed from
+          SF_EXEC_DETAIL_DASHBOARD. Null when freshness_status is STALE.
+      - name: d1_d2_sum
+        description: d1_sales + d2_sales. Null when freshness_status is STALE.
+      - name: expected_total
+        description: >
+          Total company net sales for audit_date, in $M, summed from
+          SF_EXEC_DASHBOARD. Null when freshness_status is STALE.
+      - name: difference
+        description: expected_total minus d1_d2_sum. Null when freshness_status is STALE.
+      - name: audit_status
+        description: >
+          PASS if |difference| <= 0.1; FAIL if the discrepancy exceeds that
+          threshold; FAIL with a message noting the last available dates in
+          each source table if either source hasn't landed data for audit_date.
+      - name: run_timestamp
+        description: Timestamp the model finished evaluating, in America/New_York.
