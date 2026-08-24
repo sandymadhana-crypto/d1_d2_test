@@ -22,6 +22,7 @@ reporting_date_check AS (
         DATEADD(day, -1, CONVERT_TIMEZONE('America/New_York', CURRENT_TIMESTAMP())::DATE) AS rpt_date,
         d.detail_max_date,
         t.total_max_date,
+        'test' as test,
         CASE
             WHEN d.detail_max_date = DATEADD(day, -1, CONVERT_TIMEZONE('America/New_York', CURRENT_TIMESTAMP())::DATE)
              AND t.total_max_date = DATEADD(day, -1, CONVERT_TIMEZONE('America/New_York', CURRENT_TIMESTAMP())::DATE)
